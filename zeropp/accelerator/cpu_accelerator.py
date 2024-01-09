@@ -4,7 +4,7 @@
 # DeepSpeed Team
 
 import torch
-from deepspeed.accelerator.abstract_accelerator import DeepSpeedAccelerator
+from zeropp.accelerator.abstract_accelerator import DeepSpeedAccelerator
 import oneccl_bindings_for_pytorch  # noqa: F401 # type: ignore
 import psutil
 import os
@@ -42,7 +42,7 @@ class CPU_Accelerator(DeepSpeedAccelerator):
         if device_count > 0:
             return device_count
         else:
-            from deepspeed.utils.numa import get_numa_cores
+            from zeropp.utils.numa import get_numa_cores
             # Count NUMA node for number of cpu accelerators. On machine with HBM
             # In flat mode, HBM is in separate NUMA node with no cores on this node.
             # Ignore these NUMA nodes with no cores.
@@ -238,10 +238,10 @@ class CPU_Accelerator(DeepSpeedAccelerator):
         try:
             # is op_builder from deepspeed or a 3p version? this should only succeed if it's deepspeed
             # if successful this also means we're doing a local install and not JIT compile path
-            from op_builder import __deepspeed__  # noqa: F401 # type: ignore
+            from op_builder import __zeropp__  # noqa: F401 # type: ignore
             return "op_builder.cpu"
         except ImportError:
-            return "deepspeed.ops.op_builder.cpu"
+            return "zeropp.ops.op_builder.cpu"
 
     def on_accelerator(self, tensor):
         device_str = str(tensor.device)
@@ -262,10 +262,10 @@ class CPU_Accelerator(DeepSpeedAccelerator):
         try:
             # is op_builder from deepspeed or a 3p version? this should only succeed if it's deepspeed
             # if successful this also means we're doing a local install and not JIT compile path
-            from op_builder import __deepspeed__  # noqa: F401 # type: ignore
+            from op_builder import __zeropp__  # noqa: F401 # type: ignore
             from op_builder.cpu import CCLCommBuilder, FusedAdamBuilder, CPUAdamBuilder, NotImplementedBuilder
         except ImportError:
-            from deepspeed.ops.op_builder.cpu import CCLCommBuilder, FusedAdamBuilder, CPUAdamBuilder, NotImplementedBuilder
+            from zeropp.ops.op_builder.cpu import CCLCommBuilder, FusedAdamBuilder, CPUAdamBuilder, NotImplementedBuilder
 
         if class_name == "CCLCommBuilder":
             return CCLCommBuilder

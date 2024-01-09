@@ -4,6 +4,7 @@
 # DeepSpeed Team
 
 from .builder import CUDAOpBuilder
+from zeropp.accelerator import get_accelerator
 import math
 
 class QuantizerBuilder(CUDAOpBuilder):
@@ -15,7 +16,7 @@ class QuantizerBuilder(CUDAOpBuilder):
         super().__init__(name=name)
 
     def absolute_name(self):
-        return f'deepspeed.ops.quantizer.{self.NAME}_op'
+        return f'zeropp.ops.quantizer.{self.NAME}_op'
 
     def sources(self):
         return [
@@ -42,9 +43,10 @@ class CUDAQuantizer:
 
     def __init__(self) -> None:
         if CUDAQuantizer.quantizer_cuda_module is None:
-            CUDAQuantizer.quantizer_cuda_module = deepspeed.ops.op_builder.QuantizerBuilder().load()
+            CUDAQuantizer.quantizer_cuda_module = QuantizerBuilder().load()
 
     def quantize(self, param, groups=None):
+        print(f"JINDA_DEBUG CUDAQuantizer groups: {groups}")
         if groups is None:
             try:
                 groups = self.group_size_cache[param.numel()]

@@ -216,7 +216,7 @@ class MPS_Accelerator(DeepSpeedAccelerator):
 
             return "op_builder"
         except ImportError:
-            return "deepspeed.ops.op_builder"
+            return "zeropp.ops.op_builder"
 
     # create an instance of op builder, specified by class_name
     def create_op_builder(self, op_name):

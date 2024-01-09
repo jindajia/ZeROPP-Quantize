@@ -269,10 +269,10 @@ class CUDA_Accelerator(DeepSpeedAccelerator):
         try:
             # is op_builder from deepspeed or a 3p version? this should only succeed if it's deepspeed
             # if successful this also means we're doing a local install and not JIT compile path
-            from op_builder import __deepspeed__  # noqa: F401 # type: ignore
+            from op_builder import __zeropp__  # noqa: F401 # type: ignore
             return "op_builder"
         except ImportError:
-            return "deepspeed.ops.op_builder"
+            return "zeropp.ops.op_builder"
 
     # dict that holds class name <--> class type mapping i.e.
     # 'AsyncIOBuilder': <class 'op_builder.async_io.AsyncIOBuilder'>
